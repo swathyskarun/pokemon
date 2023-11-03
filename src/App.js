@@ -1,4 +1,3 @@
-
 import './App.css';
 import {useState, useEffect} from "react";
 // import Pokemon from './Components/Pokemon';
@@ -29,14 +28,16 @@ function App() {
 
       cards.map((urls,index)=>
       {
+        return(
       axios.get(urls.url)
       .then((res)=>{
         console.log(res.data.sprites);
-        setImages([res.data.sprites]);
+        setImages(res.data.sprites);
       })
       .catch(err => console.log("error in loading url for images"))
+        )
     })
-  },[])
+  },[cards])
 
   console.log(images);
 
