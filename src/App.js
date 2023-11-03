@@ -1,61 +1,60 @@
-import logo from './logo.svg';
-import {useState, useEffect} from "react";
+
 import './App.css';
-import Cards from './Components/Cards';
+import {useState, useEffect} from "react";
+// import Pokemon from './Components/Pokemon';
 import axios from 'axios';
-import Cardsample from './Components/Cardsample';
+import Cards from './Components/Cards';
 
 function App() {
-  
   const [cards,setCards] = useState([]);
-  const [cUrl,setCurl] = useState([]);
-  const [imgUrl, setImg] = useState([]);
+  const[images,setImages]=useState([{}]);
   const temp= cards.length;
   // console.log(temp);
   useEffect(() => {
 
     //fetching name and url for respective pokemon cards
-    axios.get("http://localhost:5000/cards")
-    .then(response => {console.log(response.data);
+    //https://pokeapi.co/api/v2/pokemon
+    //http://localhost:5000/cards
+    axios.get("https://pokeapi.co/api/v2/pokemon")
+    .then((response) => {
+      console.log(response.data);
+      console.log(response.data.results);
       //storing the name and url to cards
-     setCards(response.data);
-     console.log(response.data);
-
-      // console.log(urls.url);
-      // cards.map((urls)=>{
-      //   setCurl({cUrl:[urls.url]});
-      //   console.log("card urls:")
-      //  })
-      
+     setCards(response.data.results);
      })
     .catch(error => console.log("error in fetching pokemon json"))
   },[])
 
-  useEffect(() => {
-      cards.map((oneurl,index) => {
-        return(
-          setCurl((oneurl.url))
-        )
-      
+    useEffect(()=>{
+
+      cards.map((urls,index)=>
+      {
+      axios.get(urls.url)
+      .then((res)=>{
+        console.log(res.data.sprites);
+        setImages([res.data.sprites]);
       })
-  })
-  
-console.log(cUrl)
+      .catch(err => console.log("error in loading url for images"))
+    })
+  },[])
+
+  console.log(images);
+
   return (
-    <div className="App">
+    <div className="App" >
       {
         cards.map((pkmnCard,index)=>{
+
           return(
-          <div >
-          <Cards img="" title={pkmnCard.name} length={temp}
-      text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do"/>
-      
-      </div>
-      
+            <div key = {index.toString()} >
+              <Cards img={images.back_default} title={pkmnCard.name} length={temp}
+              text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do"/>
+          
+            </div>
+          
           )
         })
-        
-      } 
+      }      
     </div>
   );
 }
