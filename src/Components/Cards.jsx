@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from 'axios';
 import "./Cards.css";
+import ImageUrl from "./ImageUrl";
 
 const imgPerRow=4;
 
@@ -7,16 +9,26 @@ function Cards(props) {
 
     const [cards] = useState();
     const[loadNext,setLoadNext] = useState(imgPerRow);
+    const[images,setImages]=useState([]);
     const handleNext=()=>{
      setLoadNext(loadNext+imgPerRow);
     }
+
+    // useEffect(()=>{
+    //   axios.get(props.img)
+    //   .then((res)=>{
+    //     console.log(res.data.sprites);
+    //     setImages(res.data.sprites);
+    //   })
+    //   .catch(err => console.log("error in loading url for images"))
+    // })
     
     return(
         <div className="card-container">
             {/* <div className="card-body"> */}
-            
-                props?.slice(0, loadNext)?.
-                <img src="" alt="card image" className="card-img"/>
+                
+                
+                <img src={props.img} alt="card image" className="card-img"/>
                 <h1 className="card-title">{props.title}</h1>
                 <p className="card-p">{props.text}</p>
                 
@@ -25,14 +37,14 @@ function Cards(props) {
             
 
             {/* </div> */}
-            {loadNext < props.length && (
+            {/* {loadNext < props.length && (
           <button
             className="mt-4"
             onClick={handleNext}
           >
             Load more
           </button>
-        )}
+        )} */}
         </div>
     )
 }
